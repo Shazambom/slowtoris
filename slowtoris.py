@@ -176,7 +176,7 @@ if __name__ == "__main__":
 		host = str(args[0])
 		port = int(args[1])
 		num_sockets = int(args[2])
-		ssl = str(args[3]).lower == "y"
+		ssl = str(args[3]).lower() == "y"
 	except:
 		print("Incorrect args format")
 		print("Correct args format: python3 slowtoris.py IPv4(str) port(int) num_sockets(int) isHTTPS(Y/N)")

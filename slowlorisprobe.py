@@ -74,11 +74,11 @@ if __name__ == "__main__":
 	try:
 		host = str(args[0])
 		port = int(args[1])
-		ssl = str(args[2]).lower == "y"
-		tor = str(args[3]).lower == "y"
+		ssl = str(args[2]).lower() == "y"
+		tor = str(args[3]).lower() == "y"
 	except:
 		print("Incorrect args format")
-		print("Correct args format: python3 slowlorisprobe.py IPv4(str) port(int) isHTTPS(Y/N)")
+		print("Correct args format: python3 slowlorisprobe.py IPv4(str) port(int) isHTTPS(Y/N) useTor(Y/N)")
 		exit(1)
 	if tor:
 		#Likely won't work very well through tor but you can try

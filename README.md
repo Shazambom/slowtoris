@@ -8,4 +8,4 @@ This is for research purposes only. Don't do anything stupid with this, only DoS
 
 slowlorisprobe.py is a tool that can probe websites for the slowloris vulnerability without launching a full scale attack.
 
-Correct args format: python3 slowlorisprobe.py IPv4(str) port(int) isHTTPS(Y/N)
+Correct args format: python3 slowlorisprobe.py IPv4(str) port(int) isHTTPS(Y/N) useTor(Y/N)
