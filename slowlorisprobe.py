@@ -58,20 +58,31 @@ class packetB(threading.Thread):
 	def getTime(self):
 		return self.endTime - self.startTime
 
+def connectTor():
+    print("Connecting to Tor")
+    import socks
+    socks.setdefaultproxy(socks.PROXY_TYPE_SOCKS5 , "127.0.0.1", 9150, True)
+    socket.socket = socks.socksocket
+    print("Connected to Tor")
 
 if __name__ == "__main__":
 	args = sys.argv[1:]
 	host = None
 	port = 80
 	ssl = False
+	tor = False
 	try:
 		host = str(args[0])
 		port = int(args[1])
 		ssl = str(args[2]).lower == "y"
+		tor = str(args[3]).lower == "y"
 	except:
 		print("Incorrect args format")
 		print("Correct args format: python3 slowlorisprobe.py IPv4(str) port(int) isHTTPS(Y/N)")
 		exit(1)
+	if tor:
+		#Likely won't work very well through tor but you can try
+		connectTor()
 	first = packetA(host, port, ssl)
 	second = packetB(host, port, ssl)
 	print("Sending first payload")
