@@ -3,6 +3,8 @@
 
 This is a version of slowloris implemented in python. It attempts to route all traffic through the Tor proxy on port 9150.
 
+Slowloris works by sending malformed http headers on a lot of different connections. It makes the webserver think that each connection is on a bad connection so the webserver will wait for the client. The clients then continue to send keep-alive packets until they are timed out by the webserver. Once a connection times out a new connection is made to take its place. This ensures that all connections allowed on the server are tied up with minimal bandwidth. Slowloris also only affects the targeted server since it doesn't require large amounts of data to be sent over a network.
+
 Correct args format: python3 slowtoris.py IPv4(str) port(int) num_sockets(int) isHTTPS(Y/N)
 
 **This is for research purposes only. Don't do anything stupid with this, only DoS servers you own or use for pen-testing.**
