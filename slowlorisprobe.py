@@ -21,6 +21,7 @@ class packetA(threading.Thread):
 			s.send(("Host: "+self.host+"\r\nUser-Agent: {}\r\n".format("Mozilla/5.0 (Macintosh; Intel Mac OS X 10.11; rv:49.0) Gecko/20100101 Firefox/49.0")).encode("utf-8"))
 			s.send(("{}\r\n".format("Accept-language: en-US,en,q=0.5")).encode("utf-8"))
 			info = s.recv(4096)
+			self.endTime = time.time()
 		except Exception as err:
 			print(err)
 			self.endTime = time.time()
@@ -51,6 +52,7 @@ class packetB(threading.Thread):
 			time.sleep(10)
 			s.send(("X-a: {}\r\n".format(random.randint(1, 5000))).encode("utf-8"))
 			info = s.recv(4096)
+			self.endTime = time.time()
 		except Exception as err:
 			print(err)
 			self.endTime = time.time()
