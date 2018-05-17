@@ -1,18 +1,18 @@
 import socket, sys, time, random, ssl, threading
 
 class packetA(threading.Thread):
-	def __init__(self, host, port, ssl):
+	def __init__(self, host, port, isHTTPS):
 		threading.Thread.__init__(self)
 		self.host = host
 		self.port = port
-		self.ssl = ssl
+		self.isHTTPS = isHTTPS
 		self.startTime = 0
 		self.endTime = 0
 
 	def run(self):
 		try:
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			if self.ssl:
+			if self.isHTTPS:
 				s = ssl.wrap_socket(s)
 			s.settimeout(15)
 			self.startTime = time.time()
@@ -30,18 +30,18 @@ class packetA(threading.Thread):
 		return self.endTime - self.startTime
 
 class packetB(threading.Thread):
-	def __init__(self, host, port, ssl):
+	def __init__(self, host, port, isHTTPS):
 		threading.Thread.__init__(self)
 		self.host = host
 		self.port = port
-		self.ssl = ssl
+		self.isHTTPS = isHTTPS
 		self.startTime = 0
 		self.endTime = 0
 
 	def run(self):
 		try:
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			if self.ssl:
+			if self.isHTTPS:
 				s = ssl.wrap_socket(s)
 			s.settimeout(15)
 			self.startTime = time.time()
@@ -71,12 +71,12 @@ if __name__ == "__main__":
 	args = sys.argv[1:]
 	host = None
 	port = 80
-	ssl = False
+	isHTTPS = False
 	tor = False
 	try:
 		host = str(args[0])
 		port = int(args[1])
-		ssl = str(args[2]).lower() == "y"
+		isHTTPS = str(args[2]).lower() == "y"
 		tor = str(args[3]).lower() == "y"
 	except:
 		print("Incorrect args format")
@@ -85,8 +85,10 @@ if __name__ == "__main__":
 	if tor:
 		#Likely won't work very well through tor but you can try
 		connectTor()
-	first = packetA(host, port, ssl)
-	second = packetB(host, port, ssl)
+	if isHTTPS:
+		port = 443
+	first = packetA(host, port, isHTTPS)
+	second = packetB(host, port, isHTTPS)
 	print("Sending first payload")
 	first.start()
 	print("Sending second payload")

